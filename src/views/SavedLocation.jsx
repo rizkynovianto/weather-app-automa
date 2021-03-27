@@ -1,19 +1,68 @@
 import React, { Component } from "react";
+import { SearchedLocationTableHeads } from '../variables/Variables';
+
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import LocationTable from '../components/LocationTable';
 
 class SavedLocation extends Component {
 
 
+    getSearchedLocationsRows = () => {
+
+        let searchedLocations = JSON.parse(localStorage.getItem('searchedLocations'));
+
+        let dataRows = [];
+
+        if(searchedLocations !== null){
+
+            searchedLocations.map(
+                
+                searchedLocation => dataRows.push([searchedLocation])
+
+            )
+
+        }
+
+        return dataRows;
+
+    }
+    
+    deleteSearchLocation = index => {
+        
+        let dataRows = JSON.parse(localStorage.getItem('searchedLocations'));
+       
+        dataRows.splice(index, 1)
+      
+        localStorage.setItem('searchedLocations', JSON.stringify(dataRows));
+
+    }
+
+    componentDidMount(){
+
+    }
+    
     render(){
 
         return(
            
-           <div>
+            <Container fluid >
+ 
+                <Row>
 
-                
+                    <Col>
+                    
+                    <LocationTable tableHeads={SearchedLocationTableHeads} 
+                                    tableRowsData={this.getSearchedLocationsRows()}
+                                    onTdDeleteClicked={this.deleteSearchLocation.bind(this)}  ></LocationTable>
+                    
+                    </Col>
 
-           </div>
+                </Row> 
+
+            </Container>
         
         )
     }
@@ -21,4 +70,4 @@ class SavedLocation extends Component {
 
 }
 
-export default LocationTable;
+export default SavedLocation;

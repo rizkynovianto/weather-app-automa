@@ -6,7 +6,7 @@ class LocationTable extends Component {
 
     render(){
         return(
-            <Table>
+            <Table className="table table-striped custom-table">
                 <thead>
                     <tr>
                     {this.props.tableHeads.map(

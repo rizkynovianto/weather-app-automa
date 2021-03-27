@@ -13,10 +13,18 @@ class SaveAndViewLocation extends Component {
         
         <ButtonGroup>
 
-            <Button variant="primary" size="lg" active>
+            <Button variant="primary" 
+                    size="lg" 
+                    name = "save"
+                    active
+                    onClick={this.props.onClick}>
                     Save
             </Button>
-            <Button variant="secondary" size="lg" active>
+            <Button variant="secondary" 
+                    size="lg" 
+                    name = "view"
+                    active
+                    onClick={this.props.onClick}>
                     View
             </Button>
     
