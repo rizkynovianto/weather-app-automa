@@ -2,7 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import "bootstrap/dist/css/bootstrap.min.css";
+import "./assets/css/bootstrap.min.css";
+import "./assets/css/style.css";
+
+
 import MainLayout from './layouts/Main.jsx';
 
 ReactDOM.render(

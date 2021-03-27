@@ -1,14 +1,22 @@
-# Getting Started with Create React App
+# Automa Weather App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A weather app using metaweather API
 
-## Available Scripts
+## Getting started
 
-In the project directory, you can run:
+To get the frontend running locally:
 
-### `npm start`
+- Clone this repo
+- `npm install` to install all req'd dependencies
+- `npm start` to start the local server (this project uses create-react-app)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Functionality overview
 
+**General functionality:**
+
+    - Showing initial weather location (Jakarta)
+    - Showing further 5 days weather prediction
+    - Save searched location into local storage
+    - Manage saved searched locations
+    - Search weather from available location on metawheater
 

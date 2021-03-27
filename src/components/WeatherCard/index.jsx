@@ -12,14 +12,14 @@ class WeatherCard extends Component {
         return(
             
             <Card style={{ width: '18rem' }}>
-            <Card.Header>{this.props.day} Header</Card.Header>
+            <Card.Header>{this.props.dateDay}</Card.Header>
             <Card.Body>
               <Col><Image src={this.props.wstate} thumbnail />
                 <Card.Text>
-                  {this.props.temperature}
+                  Temperature {this.props.temperature}
                 </Card.Text>
                 <Card.Text>
-                  {this.props.humidity}
+                  Humidity {this.props.humidity}
                 </Card.Text>
               </Col>
             </Card.Body>

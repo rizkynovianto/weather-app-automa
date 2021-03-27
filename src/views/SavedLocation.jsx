@@ -35,15 +35,13 @@ class SavedLocation extends Component {
         let dataRows = JSON.parse(localStorage.getItem('searchedLocations'));
        
         dataRows.splice(index, 1)
-      
+
         localStorage.setItem('searchedLocations', JSON.stringify(dataRows));
 
-    }
-
-    componentDidMount(){
+        window.location.reload(); //ughhh
 
     }
-    
+
     render(){
 
         return(

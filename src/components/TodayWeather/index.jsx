@@ -12,8 +12,8 @@ class TodayWeather extends Component {
         return(
         
             <Row md={4}>
-                <Col xs={{ order: 'last' }}>{this.props.temperature}</Col>
-                <Col xs>{this.props.weather}</Col>
+                <Col xs={{ order: 'last' }}>Today temperature is {this.props.temperature}</Col>
+                <Col xs>Today weather is{this.props.weather}</Col>
                 <Col xs={{ order: 'first' }}><Image src={this.props.wstate} thumbnail /></Col>
            </Row>
 

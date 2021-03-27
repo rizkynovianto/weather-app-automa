@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form"
 
@@ -51,6 +49,7 @@ class WeatherMonitor extends Component {
 
             case "save":
                 this.insertToStorage();
+                alert("Saved to storage")
                 break;    
 
             case "view":
@@ -143,9 +142,13 @@ class WeatherMonitor extends Component {
              })
     }
 
-    getMainTemperature = () => {
+    getDayName = dateString => {
 
-        return this.state.weathers[0].max_temp
+        let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        let d = new Date(dateString);
+        let dayName = days[d.getDay()];
+
+        return dayName;
 
     }
 
@@ -156,57 +159,61 @@ class WeatherMonitor extends Component {
         const mainWeather = this.state.weathers.splice(0,1);
 
         return(
-            <Container fluid > 
-                <Form onSubmit={this.submitHandler}>
-                    <Row className="show-grid">
-                        <Col><LocationSearch name="location" onChange={this.searchChangeHandler.bind(this)}></LocationSearch></Col>
-                        <Col><SaveAndViewLocation onClick={this.saveOrView.bind(this)}></SaveAndViewLocation></Col>
-                    </Row>
-                </Form>
-                <Row className="align-items-center">
-                    <Col>
-                        {mainWeather.map(weather => (
+            <div className="page-wrapper">
+                <div className="content">
+                    <Form onSubmit={this.submitHandler}>
+                    <div class="row">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6 ">
+                                <LocationSearch name="location" onChange={this.searchChangeHandler.bind(this)}></LocationSearch>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                <SaveAndViewLocation onClick={this.saveOrView.bind(this)}></SaveAndViewLocation>
+                            </div>
+                    </div>
+                    </Form>
+                    <br></br>
+                    <div class="row">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                    {mainWeather.map(weather => (
 
-                            <TodayWeather 
-                                temperature={weather.the_temp}
-                                weather={weather.weather_state_name}
-                                wstate={url+"static/img/weather/"
-                                            +weather.weather_state_abbr+".svg"}>
-                            </TodayWeather>
+                                        <TodayWeather 
+                                            temperature={weather.the_temp}
+                                            weather={weather.weather_state_name}
+                                            wstate={url+"static/img/weather/"
+                                                        +weather.weather_state_abbr+".svg"}>
+                                        </TodayWeather>
 
-                        ))}
-                    </Col>
-                </Row>
+                                    ))}
+                            </div>
+                    </div>
+                    <br></br>
+                    <div class="row">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                {mainWeather.splice(0,1).map(weather => (
+                                    <WeatherLabel 
+                                            windspeed={weather.wind_speed}
+                                            humidity={weather.humidity}
+                                            windDirection={weather.wind_direction}
+                                            airpressure={weather.air_pressure}>
 
-                <Row>
-                    <Col>
-                        {mainWeather.splice(0,1).map(weather => (
-                             <WeatherLabel 
-                                    windspeed={weather.wind_speed}
-                                    humidity={weather.humidity}
-                                    windDirection={weather.wind_direction}
-                                    airpressure={weather.air_pressure}>
-
-                            </WeatherLabel>
-                        ))}
-                    </Col>
-                </Row> 
-
-                <Row className="align-items-center">
-                {this.state.weathers.map(weather => (
-
-                    <Col>
-                        <WeatherCard
-                                 temperature={weather.the_temp}
-                                 humidity={weather.humidity}
-                                 wstate={url+"static/img/weather/"
-                                             +weather.weather_state_abbr+".svg"}>
-                        </WeatherCard>
-                    </Col>
-                ))}
-                </Row>
-
-            </Container>
+                                    </WeatherLabel>
+                                ))}
+                            </div>
+                    </div>
+                    <br></br>
+                    <div class="row">
+                                {this.state.weathers.map(weather => (
+                                            <WeatherCard
+                                                    dateDay = {this.getDayName(weather.applicable_date)}
+                                                    temperature={weather.the_temp}
+                                                    humidity={weather.humidity}
+                                                    wstate={url+"static/img/weather/"
+                                                                +weather.weather_state_abbr+".svg"}>
+                                            </WeatherCard>
+                                ))}
+                     </div>
+                 </div>   
+            </div>
 
         )
     }
