@@ -22,10 +22,12 @@ class WeatherMonitor extends Component {
         this.state = {
 
             weathers: [],
+            locationId: '',
             search:{
                 location: '',
             },
-            locations: []
+            locations: [],
+            url:"https://secure-lowlands-34022.herokuapp.com/https://www.metaweather.com/"
             
         }
 
@@ -78,30 +80,83 @@ class WeatherMonitor extends Component {
 
     }
 
-    componentDidMount(){
+    async componentDidMount(){
 
+        await this.getWeather();
 
     }
 
-    fetchSearchResult = () => {
+    getWeather = () => {
 
 
-        axios.get('', this.state )
+        let urlString = "https://secure-lowlands-34022.herokuapp.com/https://www.metaweather.com/api/location/search/?query=jakarta"
+       
+        axios.get(urlString, this.state)
              .then(response => {
-    
+
+                let woeId = response.data[0].woeid;
+                this.setState({locationId: woeId});
+                this.fetchSixDaysWeather(this.state.locationId)
+
              })
              .catch(error => {
                  console.log(error);
              })
     }
 
-    render(){
+    fetchSixDaysWeather = woeId => {
 
-        const {location} = this.state.search;
+        let urlString = "https://secure-lowlands-34022.herokuapp.com/https://www.metaweather.com/api/location/"+woeId;
+       
+        axios.get(urlString, this.state)
+             .then(response => {
+                let weathersData = response.data["consolidated_weather"]
+                this.setState({weathers: weathersData});
+             })
+             .catch(error => {
+                 console.log(error);
+             })
+
+    }
+
+    //Ugly duplication uuggh...
+    fetchSearchResult = () => {
+
+        let urlString = "https://secure-lowlands-34022.herokuapp.com/https://www.metaweather.com/api/location/search/?query="+this.state.search.location;
+
+        axios.get(urlString, this.state)
+             .then(response => {
+                if(response.data.length > 0){
+
+                    let woeId = response.data[0].woeid;
+                    this.setState({locationId: woeId});
+                    this.fetchSixDaysWeather(this.state.locationId)
+                
+                } else {
+
+                    alert("Location not found in API");
+
+                }
+             })
+             .catch(error => {
+                 console.log(error);
+             })
+    }
+
+    getMainTemperature = () => {
+
+        return this.state.weathers[0].max_temp
+
+    }
+
+    render(){
+        
+        const {url} = this.state;
+
+        const mainWeather = this.state.weathers.splice(0,1);
 
         return(
-            
-            <Container fluid >
+            <Container fluid > 
                 <Form onSubmit={this.submitHandler}>
                     <Row className="show-grid">
                         <Col><LocationSearch name="location" onChange={this.searchChangeHandler.bind(this)}></LocationSearch></Col>
@@ -109,19 +164,46 @@ class WeatherMonitor extends Component {
                     </Row>
                 </Form>
                 <Row className="align-items-center">
-                    <Col><TodayWeather></TodayWeather></Col>
+                    <Col>
+                        {mainWeather.map(weather => (
+
+                            <TodayWeather 
+                                temperature={weather.the_temp}
+                                weather={weather.weather_state_name}
+                                wstate={url+"static/img/weather/"
+                                            +weather.weather_state_abbr+".svg"}>
+                            </TodayWeather>
+
+                        ))}
+                    </Col>
                 </Row>
 
                 <Row>
-                    <Col><WeatherLabel ></WeatherLabel></Col>
+                    <Col>
+                        {mainWeather.splice(0,1).map(weather => (
+                             <WeatherLabel 
+                                    windspeed={weather.wind_speed}
+                                    humidity={weather.humidity}
+                                    windDirection={weather.wind_direction}
+                                    airpressure={weather.air_pressure}>
+
+                            </WeatherLabel>
+                        ))}
+                    </Col>
                 </Row> 
 
                 <Row className="align-items-center">
-                    <Col><WeatherCard></WeatherCard></Col>
-                    <Col><WeatherCard></WeatherCard></Col>
-                    <Col><WeatherCard></WeatherCard></Col>
-                    <Col><WeatherCard></WeatherCard></Col>
-                    <Col><WeatherCard></WeatherCard></Col>
+                {this.state.weathers.map(weather => (
+
+                    <Col>
+                        <WeatherCard
+                                 temperature={weather.the_temp}
+                                 humidity={weather.humidity}
+                                 wstate={url+"static/img/weather/"
+                                             +weather.weather_state_abbr+".svg"}>
+                        </WeatherCard>
+                    </Col>
+                ))}
                 </Row>
 
             </Container>

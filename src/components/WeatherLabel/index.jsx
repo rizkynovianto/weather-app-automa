@@ -11,10 +11,10 @@ class WeatherLabel extends Component {
         return(
         
             <Row md={4}>
-                <Col xs={{ order: 'last' }}>UV Index {this.props.uvindex}</Col>
-                <Col xs>Strom {this.props.storm}</Col>
-                <Col xs>Rain {this.props.rain}</Col>
-                <Col xs={{ order: 'first' }}>Wind {this.props.wind}</Col>
+                <Col xs={{ order: 'last' }}>Wind Speed {this.props.windspeed}</Col>
+                <Col xs>Humidity {this.props.humidity}</Col>
+                <Col xs>Wind Direction {this.props.windDirection}</Col>
+                <Col xs={{ order: 'first' }}> Air Pressure {this.props.airpressure}</Col>
            </Row>
 
 
